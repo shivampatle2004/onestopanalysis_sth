@@ -86,7 +86,7 @@ const Group = ({ label, children }) => (
 
 // ── Main Ribbon ──────────────────────────────────────────────────────────────
 const BIRibbon = ({ activeTab, setActiveTab, onAction, fileName, activeMeasure, setActiveMeasure, activeColumn, setActiveColumn, onUpdateColumn }) => {
-    let tabs = ['File', 'Home', 'Insert', 'Modeling', 'View', 'Help', 'Table tools', 'External Tools'];
+    let tabs = ['File', 'Home', 'Insert', 'Modeling', 'View' /*, 'Help', 'Table tools', 'External Tools'*/];
     if (activeMeasure) {
         tabs.push('Measure tools');
     }
@@ -774,6 +774,7 @@ const BIRibbon = ({ activeTab, setActiveTab, onAction, fileName, activeMeasure, 
         );
     };
 
+    /*
     const renderHelpToolbar = () => (
         <>
             <Group label="Help">
@@ -813,6 +814,7 @@ const BIRibbon = ({ activeTab, setActiveTab, onAction, fileName, activeMeasure, 
             </Group>
         </>
     );
+    */
 
     const renderMeasureToolsToolbar = () => (
         <>
@@ -1031,6 +1033,7 @@ const BIRibbon = ({ activeTab, setActiveTab, onAction, fileName, activeMeasure, 
         </>
     );
 
+    /*
     const renderTableToolsToolbar = () => (
         <>
             <Group label="Structure">
@@ -1082,6 +1085,7 @@ const BIRibbon = ({ activeTab, setActiveTab, onAction, fileName, activeMeasure, 
             </Group>
         </>
     );
+    */
 
     const renderFileToolbar = () => null; // File tab opens overlay, not toolbar
 
@@ -1092,9 +1096,9 @@ const BIRibbon = ({ activeTab, setActiveTab, onAction, fileName, activeMeasure, 
             case 'Insert': return renderInsertToolbar();
             case 'Modeling': return renderModelingToolbar();
             case 'View': return renderViewToolbar();
-            case 'Help': return renderHelpToolbar();
+            /* case 'Help': return renderHelpToolbar();
             case 'Table tools': return renderTableToolsToolbar();
-            case 'External Tools': return renderExternalToolsToolbar();
+            case 'External Tools': return renderExternalToolsToolbar(); */
             case 'Measure tools': return renderMeasureToolsToolbar();
             case 'Column tools': return renderColumnToolsToolbar();
             default: return renderHomeToolbar();

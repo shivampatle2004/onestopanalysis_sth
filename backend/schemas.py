@@ -98,3 +98,49 @@ class KeyInfluencersRequest(BaseModel):
     explain_by: Optional[str] = None
     max_factors: int = 12
     max_cardinality: int = 35
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# POWER AUTOMATE SCHEMAS
+# ─────────────────────────────────────────────────────────────────────────────
+
+class ActionCreate(BaseModel):
+    """One step in the automation pipeline sent from the frontend."""
+    action_type: str           # e.g. 'save_to_db', 'send_email', 'generate_report'
+    label: str                 # Friendly name shown in the UI steps list
+    execute_order: int = 1     # Position in the pipeline (1 = first)
+    config: Optional[Dict[str, Any]] = {}   # Extra params, e.g. email recipient
+
+class WorkflowCreate(BaseModel):
+    """Full workflow definition sent by the frontend when the user clicks 'Create Flow'."""
+    name: str                          # User-visible flow name
+    trigger_type: str = "button_click" # What fires this flow
+    actions: List[ActionCreate]        # Ordered list of automation steps
+    # Full URL of the page to screenshot — sent automatically by the browser (window.location.href)
+    snapshot_url: Optional[str] = "http://localhost:8000"
+
+class ActionResponse(BaseModel):
+    """Serialized action returned by the API after workflow creation."""
+    id: str
+    action_type: str
+    label: str
+    execute_order: int
+    last_status: str
+
+    class Config:
+        from_attributes = True
+
+class WorkflowResponse(BaseModel):
+    """Full workflow returned after creation, including all its steps."""
+    id: str
+    name: str
+    trigger_type: str
+    status: str
+    actions: List[ActionResponse]
+    # Set once the generate_report step saves the PDF
+    export_path: Optional[str] = None
+    # Convenience flag so the frontend can show/hide the download button
+    has_export: bool = False
+
+    class Config:
+        from_attributes = True

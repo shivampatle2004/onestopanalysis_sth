@@ -8,6 +8,7 @@ import CreateAccount from './pages/CreateAccount'
 import Dashboard from './pages/Dashboard'
 import ETLDashboard from './pages/ETLDashboard'
 import AnalyticsDashboard from './pages/AnalyticsDashboard'
+import PaginatedReportBuilder from './pages/PaginatedReportBuilder'
 import ErrorBoundary from './components/ErrorBoundary'
 
 /**
@@ -166,6 +167,14 @@ function App() {
             <Route
               path="/analytics/:fileId"
               element={<AnalyticsDashboard onLogout={handleLogout} />}
+            />
+            <Route
+              path="/reports/builder"
+              element={<PaginatedReportBuilder userId={userId} />}
+            />
+            <Route
+              path="/reports/builder/:reportId"
+              element={<PaginatedReportBuilder userId={userId} />}
             />
             <Route
               path="*"

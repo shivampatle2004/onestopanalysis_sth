@@ -526,6 +526,12 @@ function Dashboard({ userName, userId }) {
                       Visualizations
                       {charts.length > 0 && <span className="tab-count">{charts.length}</span>}
                     </button>
+                    <button
+                      className={`tab-btn ${activeTab === 'reports' ? 'active' : ''}`}
+                      onClick={() => navigate('/reports/builder')}
+                    >
+                      Paginated Reports
+                    </button>
                     <button className="tab-btn" onClick={() => navigate('/?upload=true')}>
                       <IconCSV />
                       Get Data

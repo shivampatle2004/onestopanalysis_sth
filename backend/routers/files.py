@@ -21,12 +21,10 @@ def get_db():
     finally:
         db.close()
 
-UPLOAD_DIR = "uploads"
+_BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_UPLOAD_ABS = os.path.join(_BACKEND_DIR, "uploads")
+UPLOAD_DIR = _UPLOAD_ABS
 os.makedirs(UPLOAD_DIR, exist_ok=True)
-
-_BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
-_UPLOAD_ABS = os.path.join(_BACKEND_DIR, UPLOAD_DIR)
-os.makedirs(_UPLOAD_ABS, exist_ok=True)
 
 
 def resolve_stored_file_path(file_record: UploadedFile):
@@ -532,7 +530,13 @@ def get_file_dataset(
     try:
         df = DataProcessor.read_file(resolved_path)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error reading file: {str(e)}")
+        print(f"get_file_dataset: read_file failed for {resolved_path}: {e}")
+        return dataset_missing_payload(
+            file_record,
+            limit,
+            offset,
+            f"Could not read the data file: {str(e)}",
+        )
 
     total_rows = int(file_record.row_count or len(df))
     # Paged rows for data view

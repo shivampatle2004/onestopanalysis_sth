@@ -2,6 +2,7 @@ import os
 from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -37,6 +38,11 @@ except Exception as e:
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
+
+# Async engine and session for async operations (like seed_connectors)
+ASYNC_DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://").replace("sqlite://", "sqlite+aiosqlite://")
+async_engine = create_async_engine(ASYNC_DATABASE_URL, echo=False)
+async_session = async_sessionmaker(async_engine, class_=AsyncSession, expire_on_commit=False)
 
 def create_database_if_not_exists():
     if not _HAS_PSYCOPG2:
@@ -76,15 +82,24 @@ def init_db():
     from models import (User, UploadedFile, FileColumn, ColumnStatistic, GraphDefinition,
                         UserDatabaseConnection, RemoteConnectionProfile, ETLConnection, ETLPipeline, ETLPipelineVersion,
                         ETLWorkflowNode, ETLWorkflowEdge, ETLTransformRule, ETLSchedule,
-                        ETLJob, ETLJobStep, ETLJobLog, ETLDataQualityCheck, AuditLog, UserRole, ConnectorCatalog)
+                        ETLJob, ETLJobStep, ETLJobLog, ETLDataQualityCheck, AuditLog, UserRole, ConnectorCatalog,
+                        PaginatedReport, PaginatedReportElement, PaginatedReportDataSource)
     try:
         Base.metadata.create_all(bind=engine)
         print("Database tables verified/created successfully!")
         _ensure_remote_connection_profile_columns()
         # Seed the DLT connector catalog table
         try:
+            import asyncio
             from connectors.registry import seed_connectors
-            seed_connectors()
+            try:
+                loop = asyncio.get_event_loop()
+            except RuntimeError:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+            result = loop.run_until_complete(seed_connectors())
+            if result is not None:
+                print("Connector registry synchronized with database.")
         except Exception as se:
             print(f"WARNING: Connector seed failed (non-fatal): {se}")
     except Exception as e:

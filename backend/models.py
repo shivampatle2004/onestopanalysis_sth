@@ -394,3 +394,34 @@ class DataVaultItem(Base):
 
     owner = relationship("User")
     file = relationship("UploadedFile")
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PAGINATED REPORTS MODELS
+# ─────────────────────────────────────────────────────────────────────────────
+
+class PaginatedReport(Base):
+    __tablename__ = "paginated_reports"
+    id = Column(String, primary_key=True, default=get_uuid)
+    name = Column(String, nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    page_size = Column(String, default="A4") # A4, Letter
+    orientation = Column(String, default="portrait") # portrait, landscape
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    elements = relationship("PaginatedReportElement", back_populates="report", cascade="all, delete-orphan")
+    data_sources = relationship("PaginatedReportDataSource", back_populates="report", cascade="all, delete-orphan")
+
+class PaginatedReportElement(Base):
+    __tablename__ = "paginated_report_elements"
+    id = Column(String, primary_key=True, default=get_uuid)
+    report_id = Column(String, ForeignKey("paginated_reports.id"))
+    type = Column(String, nullable=False) # table, text, image
+    config_json = Column(JSON, nullable=False)
+    report = relationship("PaginatedReport", back_populates="elements")
+
+class PaginatedReportDataSource(Base):
+    __tablename__ = "paginated_report_data_sources"
+    id = Column(String, primary_key=True, default=get_uuid)
+    report_id = Column(String, ForeignKey("paginated_reports.id"))
+    query = Column(String, nullable=True)
+    connection_id = Column(String, nullable=True) # file_id or remote profile id
+    report = relationship("PaginatedReport", back_populates="data_sources")

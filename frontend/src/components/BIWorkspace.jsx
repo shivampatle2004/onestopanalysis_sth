@@ -30,6 +30,7 @@ import BIAboutModal from './BIAboutModal';
 import BIConnectorsModal from './BIConnectorsModal';
 import BIConnectionConfigModal from './BIConnectionConfigModal';
 import DataVaultPanel from './DataVaultPanel';
+import PaginatedReportModal from './PaginatedReportModal';
 
 // Services
 // import DataService from '../services/DataService'; // Assume if needed
@@ -176,6 +177,7 @@ const BIWorkspace = ({
   const [showSqlModal, setShowSqlModal] = useState(false);
   const [showOptionsModal, setShowOptionsModal] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
+  const [showPaginatedReportModal, setShowPaginatedReportModal] = useState(false);
   const [isSqlConnecting, setIsSqlConnecting] = useState(false);
   const [sqlError, setSqlError] = useState('');
   const [sqlSuccess, setSqlSuccess] = useState('');
@@ -1624,6 +1626,9 @@ const BIWorkspace = ({
           title: 'Text box',
           content: 'Double-click to edit text box'
         });
+        break;
+      case 'paginated_report':
+        setShowPaginatedReportModal(true);
         break;
       case 'ai_influencers':
         addCustomVisual('influencers', {
@@ -3154,6 +3159,8 @@ const BIWorkspace = ({
         setActiveTab={setRibbonTab}
         onAction={handleRibbonAction}
         fileName={fileName}
+        fileId={fileId}
+        dataset={dataset}
         activeMeasure={activeMeasure}
         setActiveMeasure={setActiveMeasure}
         activeColumn={activeColumn}
@@ -3837,6 +3844,13 @@ const BIWorkspace = ({
       <BIAboutModal 
         isOpen={showAboutModal} 
         onClose={() => setShowAboutModal(false)} 
+      />
+      <PaginatedReportModal
+        isOpen={showPaginatedReportModal}
+        onClose={() => setShowPaginatedReportModal(false)}
+        fileId={fileId}
+        dataset={dataset}
+        fileName={fileName}
       />
       <BIConnectorsModal
         isOpen={showConnectorsModal}

@@ -2092,61 +2092,6 @@ const DynamicChart = ({ fileId, graphDefinition, selection = null, onClick, onUp
                     </div>
                 );
             case 'paginated_report':
-                if (opts.reportUrl) {
-                    return (
-                        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-                            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, padding: '4px 8px', background: '#f8fafc', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                    <span style={{ fontSize: '10px', fontWeight: 600, color: '#0f172a' }}>Paginated Report</span>
-                                </div>
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); setIsEditing(true); setTextContent(opts.reportUrl || ''); }}
-                                    style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '10px', color: '#3b82f6', fontWeight: 600 }}
-                                >Edit URL</button>
-                            </div>
-                            <iframe
-                                src={opts.reportUrl}
-                                style={{ width: '100%', height: '100%', border: 'none', paddingTop: '24px' }}
-                                title="Paginated Report Embed"
-                                sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-                            />
-                        </div>
-                    );
-                }
-
-                if (isEditing) {
-                    return (
-                        <div style={{ padding: '20px', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '4px' }}>
-                            <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '12px', color: '#1e293b' }}>Enter the Paginated Report URL:</div>
-                            <input
-                                type="url"
-                                value={textContent}
-                                onChange={(e) => setTextContent(e.target.value)}
-                                placeholder="https://app.powerbi.com/rdlreports/..."
-                                style={{ width: '100%', padding: '8px', border: '1px solid #cbd5e1', borderRadius: '4px', outline: 'none', marginBottom: '16px', fontSize: '12px' }}
-                                autoFocus
-                            />
-                            <div style={{ display: 'flex', gap: '8px' }}>
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setIsEditing(false);
-                                        if (textContent.trim() && onUpdate) {
-                                            onUpdate({ options: { ...opts, reportUrl: textContent.trim() } });
-                                        }
-                                    }}
-                                    style={{ padding: '6px 16px', background: '#0f172a', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 600 }}
-                                >Save</button>
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); setIsEditing(false); }}
-                                    style={{ padding: '6px 16px', background: 'transparent', color: '#64748b', border: '1px solid #cbd5e1', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 600 }}
-                                >Cancel</button>
-                            </div>
-                        </div>
-                    );
-                }
-
                 return (
                     <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
                         <div style={{ padding: '8px 12px', background: '#e2e8f0', display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid #cbd5e1' }}>
@@ -2155,12 +2100,8 @@ const DynamicChart = ({ fileId, graphDefinition, selection = null, onClick, onUp
                         </div>
                         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px', textAlign: 'center' }}>
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '12px' }}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                            <div style={{ fontSize: '12px', fontWeight: 500, color: '#334155', marginBottom: '8px' }}>Connect to a paginated report</div>
-                            <div style={{ fontSize: '11px', color: '#64748b', maxWidth: '250px' }}>Enter the workspace and report details to embed a pixel-perfect paginated report here.</div>
-                            <button
-                                onClick={(e) => { e.stopPropagation(); setIsEditing(true); setTextContent(''); }}
-                                style={{ marginTop: '16px', padding: '6px 16px', background: '#0f172a', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '11px', fontWeight: 600, cursor: 'pointer' }}
-                            >Connect to report</button>
+                            <div style={{ fontSize: '12px', fontWeight: 500, color: '#334155', marginBottom: '8px' }}>Use Insert → Paginated Report</div>
+                            <div style={{ fontSize: '11px', color: '#64748b', maxWidth: '250px' }}>Generate PDF reports from the Insert tab ribbon.</div>
                         </div>
                     </div>
                 );

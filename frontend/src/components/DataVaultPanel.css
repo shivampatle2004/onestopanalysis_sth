@@ -1,0 +1,569 @@
+/* DataVaultPanel.css — Premium DataVault dataset browser panel */
+
+/* ── Overlay ─────────────────────────────────────────────────────────────── */
+.dv-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 1200;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 48px;
+  animation: dv-fade-in 0.18s ease;
+}
+
+@keyframes dv-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Panel Shell ─────────────────────────────────────────────────────────── */
+.dv-panel {
+  width: 820px;
+  max-width: 96vw;
+  max-height: 84vh;
+  background: #1b1f2e;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(108, 99, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: dv-slide-up 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dv-slide-up {
+  from { transform: translateY(24px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.dv-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 24px;
+  background: linear-gradient(135deg, #252a3e 0%, #1d2136 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  flex-shrink: 0;
+}
+
+.dv-header-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6c63ff 0%, #a78bfa 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(108, 99, 255, 0.45);
+}
+
+.dv-header-text {
+  flex: 1;
+}
+
+.dv-header-text h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #f0f1f8;
+  letter-spacing: -0.2px;
+}
+
+.dv-header-text p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #8b92b3;
+}
+
+.dv-badge {
+  background: linear-gradient(135deg, #6c63ff, #a78bfa);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.2px;
+}
+
+.dv-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.06);
+  color: #8b92b3;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.dv-close-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f0f1f8;
+}
+
+/* ── Toolbar (search + filter) ───────────────────────────────────────────── */
+.dv-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  background: #1b1f2e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+}
+
+.dv-search-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.dv-search-wrapper svg {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #5a6080;
+  pointer-events: none;
+}
+
+.dv-search {
+  width: 100%;
+  padding: 8px 12px 8px 34px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e0e2f0;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+  box-sizing: border-box;
+}
+
+.dv-search::placeholder {
+  color: #5a6080;
+}
+
+.dv-search:focus {
+  border-color: rgba(108, 99, 255, 0.5);
+  background: rgba(108, 99, 255, 0.06);
+}
+
+.dv-source-filter {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e0e2f0;
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+  min-width: 130px;
+}
+
+.dv-source-filter option {
+  background: #1b1f2e;
+}
+
+.dv-refresh-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  color: #8b92b3;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.dv-refresh-btn:hover {
+  background: rgba(108, 99, 255, 0.15);
+  border-color: rgba(108, 99, 255, 0.4);
+  color: #a78bfa;
+}
+
+.dv-refresh-btn.spinning svg {
+  animation: dv-spin 0.7s linear infinite;
+}
+
+@keyframes dv-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Dataset List ─────────────────────────────────────────────────────────── */
+.dv-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dv-list::-webkit-scrollbar {
+  width: 5px;
+}
+.dv-list::-webkit-scrollbar-track { background: transparent; }
+.dv-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+/* ── Empty State ─────────────────────────────────────────────────────────── */
+.dv-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  text-align: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.dv-empty-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: rgba(108, 99, 255, 0.1);
+  border: 1px solid rgba(108, 99, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c63ff;
+  margin-bottom: 4px;
+}
+
+.dv-empty h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #c8cbde;
+}
+
+.dv-empty p {
+  margin: 0;
+  font-size: 13px;
+  color: #5a6080;
+  max-width: 320px;
+  line-height: 1.5;
+}
+
+/* ── Dataset Card ─────────────────────────────────────────────────────────── */
+.dv-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  transition: all 0.15s;
+  cursor: default;
+}
+
+.dv-card:hover {
+  background: rgba(108, 99, 255, 0.07);
+  border-color: rgba(108, 99, 255, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Source icon bubble */
+.dv-card-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 18px;
+}
+
+.dv-card-icon.source-csv      { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+.dv-card-icon.source-excel    { background: rgba(34, 197, 94,  0.15); color: #22c55e; }
+.dv-card-icon.source-json     { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+.dv-card-icon.source-parquet  { background: rgba(249, 115, 22, 0.15); color: #f97316; }
+.dv-card-icon.source-mysql    { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+.dv-card-icon.source-postgresql { background: rgba(99, 102, 241, 0.15); color: #6366f1; }
+.dv-card-icon.source-api      { background: rgba(236, 72, 153,  0.15); color: #ec4899; }
+.dv-card-icon.source-entered  { background: rgba(168, 85, 247, 0.15); color: #a855f7; }
+.dv-card-icon.source-sql      { background: rgba(14, 165, 233,  0.15); color: #0ea5e9; }
+.dv-card-icon.source-file     { background: rgba(148, 163, 184, 0.12); color: #94a3b8; }
+
+/* Card main content */
+.dv-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.dv-card-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #e0e2f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+
+.dv-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dv-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #8b92b3;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 7px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  white-space: nowrap;
+}
+
+.dv-chip.source {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  color: #a78bfa;
+  background: rgba(108, 99, 255, 0.1);
+  border-color: rgba(108, 99, 255, 0.2);
+}
+
+.dv-card-timestamp {
+  font-size: 11px;
+  color: #5a6080;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* ── Card Actions ─────────────────────────────────────────────────────────── */
+.dv-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.dv-card-actions button {
+  padding: 5px 11px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.14s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dv-btn-load {
+  background: linear-gradient(135deg, #6c63ff, #a78bfa);
+  color: #fff;
+  border-color: transparent !important;
+  box-shadow: 0 2px 8px rgba(108, 99, 255, 0.35);
+}
+
+.dv-btn-load:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(108, 99, 255, 0.5);
+}
+
+.dv-btn-preview {
+  background: rgba(255, 255, 255, 0.06);
+  color: #c8cbde;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dv-btn-preview:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e0e2f0;
+}
+
+.dv-btn-delete {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.2) !important;
+}
+
+.dv-btn-delete:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* ── Preview Modal ────────────────────────────────────────────────────────── */
+.dv-preview-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: dv-fade-in 0.15s ease;
+}
+
+.dv-preview-modal {
+  width: 860px;
+  max-width: 95vw;
+  max-height: 82vh;
+  background: #1b1f2e;
+  border-radius: 12px;
+  border: 1px solid rgba(108, 99, 255, 0.25);
+  box-shadow: 0 24px 72px rgba(0, 0, 0, 0.65);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: dv-slide-up 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dv-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #252a3e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  flex-shrink: 0;
+}
+
+.dv-preview-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e0e2f0;
+}
+
+.dv-preview-header span {
+  font-size: 12px;
+  color: #8b92b3;
+  margin-left: 8px;
+}
+
+.dv-preview-loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #8b92b3;
+  font-size: 13px;
+  padding: 40px;
+}
+
+.dv-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(108, 99, 255, 0.3);
+  border-top-color: #6c63ff;
+  border-radius: 50%;
+  animation: dv-spin 0.7s linear infinite;
+}
+
+.dv-preview-error {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  color: #f87171;
+  font-size: 13px;
+  padding: 40px;
+  text-align: center;
+}
+
+/* ── Table Wrapper ────────────────────────────────────────────────────────── */
+.dv-preview-table-wrap {
+  flex: 1;
+  overflow: auto;
+  padding: 12px 16px;
+}
+
+.dv-preview-table-wrap::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.dv-preview-table-wrap::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.dv-preview-table {
+  border-collapse: collapse;
+  font-size: 12px;
+  width: max-content;
+  min-width: 100%;
+}
+
+.dv-preview-table th {
+  position: sticky;
+  top: 0;
+  background: #252a3e;
+  color: #a78bfa;
+  font-weight: 600;
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(108, 99, 255, 0.25);
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  z-index: 10;
+}
+
+.dv-preview-table td {
+  color: #c8cbde;
+  padding: 6px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dv-preview-table tr:hover td {
+  background: rgba(108, 99, 255, 0.05);
+}
+
+.dv-preview-table tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.dv-footer {
+  padding: 12px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 12px;
+  color: #5a6080;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.dv-footer a {
+  color: #a78bfa;
+  text-decoration: none;
+  font-weight: 500;
+}
+.dv-footer a:hover { text-decoration: underline; }

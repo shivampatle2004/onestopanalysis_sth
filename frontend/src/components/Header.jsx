@@ -44,6 +44,7 @@ function Header({ isAuthenticated, userName, onLogout, isDarkMode, toggleTheme }
           {isAuthenticated ? (
             <>
               <Link to="/dashboard" className="nav-link">Workspace</Link>
+              <Link to="/reports/builder" className="nav-link">Paginated Reports</Link>
             </>
           ) : (
             <>

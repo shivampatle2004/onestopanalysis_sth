@@ -394,3 +394,82 @@ class DataVaultItem(Base):
 
     owner = relationship("User")
     file = relationship("UploadedFile")
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PAGINATED REPORTS MODELS
+# ─────────────────────────────────────────────────────────────────────────────
+
+class PaginatedReport(Base):
+    """Stores metadata-driven paginated report definitions (pixel-perfect layouts)."""
+    __tablename__ = "paginated_reports"
+
+    id = Column(String, primary_key=True, default=get_uuid)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    name = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+    # Stores the full layout structure: pages, elements (tables, charts, text), 
+    # absolute positions, styles, header/footer configuration.
+    layout_json = Column(JSON, nullable=False, default=dict)
+    # Maps report elements to DataVault IDs and query configurations (aggregations, etc.)
+    datasource_mapping = Column(JSON, nullable=False, default=dict)
+    # Parameter definitions for user input (dropdowns, dates)
+    parameters = Column(JSON, nullable=True, default=list)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+    owner = relationship("User")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# POWER AUTOMATE WORKFLOW MODELS
+# ─────────────────────────────────────────────────────────────────────────────
+
+class AutomateWorkflow(Base):
+    """
+    Represents a saved Power Automate-like workflow definition.
+    Each workflow has a name, a trigger type, a status, and links to
+    multiple actions that form its execution pipeline.
+    """
+    __tablename__ = "automate_workflows"
+
+    id = Column(String, primary_key=True, default=get_uuid)
+    name = Column(String(255), nullable=False)
+    # The event that fires this workflow, e.g. 'button_click', 'schedule', 'data_change'
+    trigger_type = Column(String(100), nullable=False, default="button_click")
+    # Track execution state: 'idle', 'running', 'success', 'failed'
+    status = Column(String(50), nullable=False, default="idle")
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    last_run_at = Column(DateTime(timezone=True), nullable=True)
+    # The URL of the dashboard page to capture as a PDF snapshot
+    snapshot_url = Column(String(1000), nullable=True)
+    # Filesystem path to the generated PDF (set after generate_report completes)
+    export_path = Column(String(1000), nullable=True)
+
+    # Each workflow owns many ordered actions
+    actions = relationship("AutomateAction", back_populates="workflow",
+                           cascade="all, delete-orphan", order_by="AutomateAction.execute_order")
+
+
+class AutomateAction(Base):
+    """
+    Represents a single automation step within a workflow.
+    Actions execute in order (execute_order) and can carry a JSON config
+    holding step-specific parameters (e.g. recipient email for send_email).
+    """
+    __tablename__ = "automate_actions"
+
+    id = Column(String, primary_key=True, default=get_uuid)
+    workflow_id = Column(String, ForeignKey("automate_workflows.id"), nullable=False)
+    # e.g. 'save_to_db', 'send_email', 'generate_report', 'webhook'
+    action_type = Column(String(100), nullable=False)
+    # Human-readable label shown in the UI
+    label = Column(String(255), nullable=False)
+    # Step position in the pipeline (1-indexed)
+    execute_order = Column(Integer, nullable=False, default=1)
+    # Optional JSON config, e.g. { "recipient": "user@example.com" }
+    config = Column(JSON, nullable=True, default=dict)
+    # Outcome of the last execution: 'pending', 'success', 'failed'
+    last_status = Column(String(50), nullable=False, default="pending")
+
+    workflow = relationship("AutomateWorkflow", back_populates="actions")
+

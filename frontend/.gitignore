@@ -31,3 +31,31 @@ pnpm-debug.log*
 # OS
 .DS_Store
 Thumbs.db
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+.env
+
+# Node
+node_modules/
+
+# Build files
+dist/
+build/
+
+# Logs
+*.log
+
+# Mac
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Env files
+.env*

@@ -10,7 +10,7 @@ import {
     AppWindow, Image, MousePointer2, TrendingUp, Square, Circle, Minus, Triangle, ArrowRight,
     Users, Eye, Lock, Globe, Settings, Play, BookOpen, ExternalLink, Terminal, Cpu, Info, Palette,
     Calendar, RefreshCw, UserCheck, Languages, Binary, FileJson, Smartphone, Layers, Timer, Filter, Bookmark, Link2, Tag,
-    Archive, FileText as FileTextIcon
+    Archive
 } from 'lucide-react';
 import InstallVisualModal from './InstallVisualModal';
 import './BIRibbon.css';
@@ -85,9 +85,8 @@ const Group = ({ label, children }) => (
 );
 
 // ── Main Ribbon ──────────────────────────────────────────────────────────────
-
-const BIRibbon = ({ activeTab, setActiveTab, onAction, fileName, activeMeasure, setActiveMeasure, activeColumn, setActiveColumn, onUpdateColumn, fileId, dataset }) => {
-    let tabs = ['File', 'Home', 'Insert', 'Modeling', 'View', 'Help', 'Table tools', 'External Tools'];
+const BIRibbon = ({ activeTab, setActiveTab, onAction, fileName, activeMeasure, setActiveMeasure, activeColumn, setActiveColumn, onUpdateColumn }) => {
+    let tabs = ['File', 'Home', 'Insert', 'Modeling', 'View' /*, 'Help', 'Table tools', 'External Tools'*/];
     if (activeMeasure) {
         tabs.push('Measure tools');
     }
@@ -112,17 +111,17 @@ const BIRibbon = ({ activeTab, setActiveTab, onAction, fileName, activeMeasure, 
         }
     };
 
-    const act = (id) => { 
+    const act = (id) => {
         if (id === 'vis_appsource') {
-             setInstallModalMode('appsource');
-             setInstallModalOpen(true);
+            setInstallModalMode('appsource');
+            setInstallModalOpen(true);
         } else if (id === 'vis_file') {
-             setInstallModalMode('file');
-             setInstallModalOpen(true);
+            setInstallModalMode('file');
+            setInstallModalOpen(true);
         } else {
-             onAction(id); 
+            onAction(id);
         }
-        closeDropdown(); 
+        closeDropdown();
     };
 
     // ── Get Data sub-items
@@ -352,14 +351,6 @@ const BIRibbon = ({ activeTab, setActiveTab, onAction, fileName, activeMeasure, 
                         <Dropdown options={moreVisualsOptions} onClose={closeDropdown} onSelect={act} />
                     )}
                 </div>
-
-                <RibbonBtn
-                    icon={<FileTextIcon size={32} />}
-                    label="Paginated Report"
-                    onClick={() => act('paginated_report')}
-                    disabled={!fileId}
-                    tooltip="Generate a paginated PDF report with tables"
-                />
             </Group>
 
             {/* ── Calculations ── */}
@@ -487,6 +478,12 @@ const BIRibbon = ({ activeTab, setActiveTab, onAction, fileName, activeMeasure, 
 
             {/* ── Power Platform ── */}
             <Group label="Power Platform">
+                <RibbonBtn
+                    icon={<FileText size={32} />}
+                    label="Paginated report"
+                    onClick={() => act('pp_paginated')}
+                    tooltip="Embed a paginated report"
+                />
                 <RibbonBtn
                     icon={<AppWindow size={32} />}
                     label="Power Apps"
@@ -1158,10 +1155,10 @@ const BIRibbon = ({ activeTab, setActiveTab, onAction, fileName, activeMeasure, 
                     {renderToolbar()}
                 </div>
             )}
-            <InstallVisualModal 
-                isOpen={installModalOpen} 
-                onClose={() => setInstallModalOpen(false)} 
-                mode={installModalMode} 
+            <InstallVisualModal
+                isOpen={installModalOpen}
+                onClose={() => setInstallModalOpen(false)}
+                mode={installModalMode}
                 onAddVisual={(id) => onAction('AddObject', id)}
             />
         </div>

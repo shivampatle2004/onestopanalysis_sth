@@ -1,26 +1,65 @@
-# Python
-backend/__pycache__/
-backend/venv/
-backend/.env
-backend/analytics.db
-backend/uploads/
-backend/error_log.txt
-backend/pip_error.txt
-backend/all_files.txt
-
-# Node
-frontend/node_modules/
-frontend/.vite/
-frontend/dist/
-frontend/.env
-frontend/.next/
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
 
 # IDEs
 .vscode/
 .idea/
-*.swp
-*.swo
 
-# OS
-.DS_Store
-Thumbs.db
+# Virtual Environments
+.venv/
+venv/
+backend/venv/
+backend/env/
+
+# Python / PyCache
+__pycache__/
+**/__pycache__/
+backend/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node.js
+node_modules/
+frontend/node_modules/
+frontend/.vite/
+frontend/.next/
+frontend/dist/
+
+# Build Artifacts
+backend/static/assets/
+backend/static/index.html
+backend/static/image.png
+# Keep logos if they are source assets, or ignore everything in static except logos
+# backend/static/*
+# !backend/static/*.png
+
+# Environment & Private Data
+.env
+backend/.env
+frontend/.env
+*.db
+backend/analytics.db
+analytics.db
+
+# Logs & Temporary Files
+*.log
+backend/backend_dev.log
+frontend_dev.log
+backend/error_log.txt
+backend/pip_error.txt
+backend/all_files.txt
+
+# Generated Reports & Test Data
+*.pdf
+*.csv
+backend/exports/
+backend/uploads/
+uploads/
+test_data.csv
+test_upload.csv
+*.pdf
+*.csv

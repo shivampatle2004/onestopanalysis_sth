@@ -83,7 +83,8 @@ def init_db():
                         UserDatabaseConnection, RemoteConnectionProfile, ETLConnection, ETLPipeline, ETLPipelineVersion,
                         ETLWorkflowNode, ETLWorkflowEdge, ETLTransformRule, ETLSchedule,
                         ETLJob, ETLJobStep, ETLJobLog, ETLDataQualityCheck, AuditLog, UserRole, ConnectorCatalog,
-                        PaginatedReport, PaginatedReportElement, PaginatedReportDataSource)
+                        PaginatedReport)
+
     try:
         Base.metadata.create_all(bind=engine)
         print("Database tables verified/created successfully!")

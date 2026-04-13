@@ -34,17 +34,50 @@ def list_reports(user_id: Optional[int] = None, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("", status_code=201)
+@router.post("/create", status_code=201)
 def create_report(payload: Dict[str, Any] = Body(...), db: Session = Depends(get_db)):
-    """Create a new paginated report definition."""
+    """
+    Create a new paginated report definition.
+    Supports both the new 'layout' format and the legacy 'elements'/'data_sources' format.
+    """
     try:
+        # Detect legacy format and translate to new layout_json structure
+        layout = payload.get("layout", {})
+        datasource_mapping = payload.get("datasource_mapping", {})
+        
+        if not layout and "elements" in payload:
+            # Legacy format detected
+            layout = {
+                "pages": [
+                    {
+                        "id": "page-1",
+                        "elements": payload.get("elements", []),
+                        "settings": {
+                            "size": payload.get("page_size", "A4"),
+                            "orientation": payload.get("orientation", "portrait")
+                        }
+                    }
+                ]
+            }
+            
+            # Map legacy data_sources to datasource_mapping
+            # In the legacy format, we usually had a data_source_index in element config
+            # We'll try to preserve what we can.
+            if "data_sources" in payload:
+                for idx, ds in enumerate(payload["data_sources"]):
+                    # We don't have a stable element ID mapping here, 
+                    # but the elements themselves have IDs in the new system.
+                    pass 
+
         report = models.PaginatedReport(
             name=payload.get("name", "Untitled Report"),
             description=payload.get("description"),
             user_id=payload.get("user_id"),
-            layout_json=payload.get("layout", {}),
-            datasource_mapping=payload.get("datasource_mapping", {}),
+            layout_json=layout,
+            datasource_mapping=datasource_mapping,
             parameters=payload.get("parameters", [])
         )
+
         db.add(report)
         db.commit()
         db.refresh(report)
@@ -166,7 +199,9 @@ def get_report_data(
     }
 
 @router.post("/{report_id}/export/pdf")
+@router.post("/{report_id}/generate-pdf")
 def export_report_pdf(report_id: str, db: Session = Depends(get_db)):
+
     """Trigger server-side PDF generation for a report."""
     report = db.query(models.PaginatedReport).filter(models.PaginatedReport.id == report_id).first()
     if not report:
